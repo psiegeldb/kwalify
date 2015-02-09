@@ -63,6 +63,9 @@ class Kwalify::BaseParser
     return @scanner.peep(n)
   end
 
+  def terminate
+    return @scanner.terminate
+  end
 
   def _getch
     ch = @scanner.getch()

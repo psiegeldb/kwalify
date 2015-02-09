@@ -103,7 +103,9 @@ class Kwalify::Yaml::Parser < Kwalify::BaseParser
   def skip_spaces_and_comments()
     scan(/\s+/)
     while match?(/\#/)
-      scan(/.*?\n/)
+      if scan(/.*?\n/).nil?
+        terminate
+      end
       scan(/\s+/)
     end
   end
@@ -338,7 +340,7 @@ class Kwalify::Yaml::Parser < Kwalify::BaseParser
     path[-1] = key
     #if map.is_a?(Hash) && map.key?(key) && !is_merged
     if map.respond_to?('key?') && map.key?(key) && !is_merged
-      rule = map_rule.mapping[key]
+      rule = map_rule.nil? ? nil : map_rule.mapping[key]
       unless rule && rule.default
         raise _syntax_error("mapping key is duplicated.", path)
       end
