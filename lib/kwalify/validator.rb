@@ -127,6 +127,7 @@ module Kwalify
     def _validate_sequence(list, seq_rule, path, errors, done, uniq_table, recursive=true)
       assert_error("seq_rule.sequence.class==#{seq_rule.sequence.class.name} (expected Array)") unless seq_rule.sequence.is_a?(Array)
       assert_error("seq_rule.sequence.length==#{seq_rule.sequence.length} (expected 1)") unless seq_rule.sequence.length == 1
+      _validate_length(list, rule, path, errors) if seq_rule.length
       return if list.nil? || !recursive
       rule = seq_rule.sequence[0]
       uniq_table = rule._uniqueness_check_table()
@@ -230,7 +231,7 @@ module Kwalify
 
     def _validate_range(value, rule, path, errors)
       assert_error("rule=#{rule._inspect}") unless rule.range
-      assert_error("value.class=#{value.class.name}") unless Types.scalar?(value)
+      assert_error("value.class=#{value.class.name}") unless Types.scalar?(value) || value.is_a?(Array)
       h = rule.range
       max, min, max_ex, min_ex = h['max'], h['min'], h['max-ex'], h['min-ex']
       if max && max < value
@@ -254,8 +255,15 @@ module Kwalify
 
     def _validate_length(value, rule, path, errors)
       assert_error("rule=#{rule._inspect}") unless rule.length
-      assert_error("value.class=#{value.class.name}") unless value.is_a?(String) || value.is_a?(Text)
-      len = value.to_s.length
+      
+      if value.is_a?(Array)
+        len = value.length
+      elsif value.is_a?(String) || value.is_a?(Text)
+        len = value.to_s.length
+      else
+        assert_error("value.class=#{value.class.name}")
+      end
+
       h = rule.length
       max, min, max_ex, min_ex = h['max'], h['min'], h['max-ex'], h['min-ex']
       if max && max < len

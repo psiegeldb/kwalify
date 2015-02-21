@@ -144,8 +144,8 @@ module Kwalify
         val = hash['length']
         curr_path = path + "/length"
         #val.is_a?(Hash) or errors << validate_error(:length_notmap, rule, curr_path, val)
-        unless type == 'str' || type == 'text'
-          errors << validate_error(:length_nottext, rule, path, 'length:')
+        unless type == 'str' || type == 'text' || type == 'seq'
+          errors << validate_error(:length_notallowed, rule, path, 'length:')
         end
         #val.each do |lkey, lval|
         #  #case lkey

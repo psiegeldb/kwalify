@@ -271,9 +271,9 @@ module Kwalify
         #* key=:length_notmap  msg="not a mapping."
         raise schema_error(:length_notmap, rule, path, val)
       end
-      unless @type == 'str' || @type == 'text'
-        #* key=:length_nottext  msg="is available only with string or text."
-        raise schema_error(:length_nottext, rule, File.dirname(path), 'length:')
+      unless @type == 'str' || @type == 'text' || @type == 'seq'
+        #* key=:length_notallowed  msg="is available only with string or text or sequence."
+        raise schema_error(:length_notallowed, rule, File.dirname(path), 'length:')
       end
       val.each do |k, v|
         case k
@@ -433,7 +433,6 @@ module Kwalify
         raise schema_error(:seq_conflict, rule, path, 'pattern:')   if @pattern
         raise schema_error(:seq_conflict, rule, path, 'mapping:')   if @mapping
         raise schema_error(:seq_conflict, rule, path, 'range:')     if @range
-        raise schema_error(:seq_conflict, rule, path, 'length:')    if @length
       elsif @type == 'map'
         #* key=:map_nomapping  msg="type 'map' requires 'mapping:'."
         raise schema_error(:map_nomapping, rule, path, nil)  unless hash.key?('mapping')

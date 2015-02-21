@@ -84,7 +84,7 @@ END
    @@messages[:range_maxexlemin]     = "max-ex '%s' is less than or equal to min '%s'."
    @@messages[:range_maxexleminex]   = "max-ex '%s' is less than or equal to min-ex '%s'."
    @@messages[:length_notmap]        = "not a mapping."
-   @@messages[:length_nottext]       = "is available only with string or text."
+   @@messages[:length_notallowed]    = "is available only with string or text or sequence."
    @@messages[:length_notint]        = "not an integer."
    @@messages[:length_undefined]     = "undefined key."
    @@messages[:length_twomax]        = "both 'max' and 'max-ex' are not available at once."
