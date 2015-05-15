@@ -102,7 +102,8 @@ class Kwalify::Yaml::Parser < Kwalify::BaseParser
 
   def skip_spaces_and_comments()
     scan(/\s+/)
-    while match?(/\#/)
+    # DB:PaulS - Added ! prefix to also skip tags
+    while match?(/(\#|\!)/)
       if scan(/.*?\n/).nil?
         terminate
       end
@@ -237,7 +238,8 @@ class Kwalify::Yaml::Parser < Kwalify::BaseParser
   def parse_block_value(level, rule, path, uniq_table, container)
     skip_spaces_and_comments()
     ## nil
-    return nil if @column <= level || eos?
+    # DB:PaulS - Fixed bug recognizing '-' as indentation, from: http://sourceforge.net/p/kwalify/bugs/10/
+    return nil if @column < level || (@column == level && !match?(/-\s+/)) || eos?
     ## anchor and alias
     name = nil
     if scan(/\&([-\w]+)/)
