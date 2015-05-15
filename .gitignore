@@ -1,1 +1,7 @@
 *~
+kwalify-*.gem
+.idea
+test/*.document
+test/*.schema
+test/stream.*
+test/coverage

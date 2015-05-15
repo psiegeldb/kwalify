@@ -12,7 +12,7 @@ spec = Gem::Specification.new do |s|
    ## package information
    s.name        = "kwalify"
    s.author      = "Paul Siegel"
-   s.version     = "0.7.3"
+   s.version     = "0.7.4"
    s.platform    = Gem::Platform::RUBY
    s.homepage    = "http://www.kuwata-lab.com/kwalify/"
    s.summary     = "a parser, schema validator, and data-binding tool for YAML and JSON."
