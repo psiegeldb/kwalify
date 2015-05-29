@@ -86,7 +86,18 @@ class Kwalify::BaseParser
     ch == '"' || ch == "'" or raise "assertion error"
     endch = ch
     s = ''
-    while !(ch = _getch()).nil? && ch != endch
+
+    # DB:PaulS - Added handling of escaped single quotes
+    while !(ch = _getch()).nil?
+      if ch == endch
+        if endch == "'" && peep() == "'"
+          ch = _getch()
+        else
+          break
+        end
+      end
+      # DB:PaulS - Fin
+
       if ch != '\\'
         s << ch
       elsif (ch = _getch()).nil?
