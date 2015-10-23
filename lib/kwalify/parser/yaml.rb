@@ -302,7 +302,7 @@ class Kwalify::Yaml::Parser < Kwalify::BaseParser
       return text
     end
     ## scalar
-    scalar = parse_block_scalar(rule, path, uniq_table)
+    scalar = parse_block_scalar(level, rule, path, uniq_table)
     @anchors[name] = scalar if name
     return scalar
   end
@@ -464,7 +464,7 @@ class Kwalify::Yaml::Parser < Kwalify::BaseParser
   private :to_mapkey
 
 
-  def parse_block_scalar(rule, path, uniq_table)
+  def parse_block_scalar(level, rule, path, uniq_table)
     _linenum = @linenum                                                    #*V
     _column  = @column                                                     #*V
     ch = peep(1)
@@ -472,9 +472,9 @@ class Kwalify::Yaml::Parser < Kwalify::BaseParser
       val = scan_string()
       scan(/[ \t]*(?:\#.*)?$/)
     else
-      scan(/(.*?)[ \t]*(?:\#.*)?$/)
+      text = scan_block_scalar(level)
       #str.rstrip!
-      val = to_scalar(group(1))
+      val = to_scalar(text)
     end
     val = create_scalar(rule, val, _linenum, _column)                      #*V
     #_set_error_info(_linenum, _column) do                                 #*V
