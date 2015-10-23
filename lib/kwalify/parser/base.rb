@@ -130,6 +130,29 @@ class Kwalify::BaseParser
     return s
   end
 
+  def scan_block_scalar(column)
+    scan(/(.*?)[ \t]*(?:\#.*)?$/)
+    result = group(1)
+
+    blank_lines = 0
+    while match?(/\r?\n?( *)(.*?)(?:\#.*)?(\r?\n)/)
+      spaces = group(1)
+      text   = group(2)
+      break if spaces.length <= column
+
+      if text.empty?
+        blank_lines += 1
+      elsif blank_lines > 0
+        blank_lines.times { result << '\n' }
+        blank_lines = 0
+      else
+        result << ' '
+      end
+      result << text
+      scan(/.*?\n/)
+    end
+    result
+  end
 
   def _syntax_error(message, path=nil, linenum=@linenum, column=@column)
     #message = _build_message(message_key)
